@@ -1,30 +1,45 @@
 from selenium import webdriver
+import unittest
 
-# Gwen goes to check out the app's homepage 
-browser = webdriver.Firefox()
-browser.get('http://localhost:8000')
 
-# She notices page title and header mention todo lists
-assert 'TODO' in browser.title
+class NewVisitorTest(unittest.TestCase):
+    def setUp(self):
+        self.browser = webdriver.Firefox()
 
-# She is invited to enter a todo item straight away
+    def tearDown(self):
+        self.browser.quit()
 
-# She types "Mow the lawn" into a textbox
+    def test_can_start_a_list_and_retrieve_it_later(self):
+        # Gwen goes to check out the app's homepage
+        self.browser.get('http://localhost:8000')
 
-# When she hits enter, the page updates and now lists:
-# "1: Mow the lawn" as an item on the todo list
+        # She notices page title and header mention todo lists
+        self.assertIn('TODO', self.browser.title)
+        self.fail('Finish the test!')  # this will fail, used as a reminder
 
-# There still exists the textbox inviting Gwen to add 
-# another item. She enters "Buy some kombucha" as another
-# item on the list.
+        # She is invited to enter a todo item straight away
 
-# The page updates again, now shows two items on her list
+    # She types "Mow the lawn" into a textbox
 
-# Gwen wonders if the site will remember her list. Then 
-# she sees the site has generated a unique URL for her
-# and there is some explanatory text to that effect.
+    # When she hits enter, the page updates and now lists:
+    # "1: Mow the lawn" as an item on the todo list
 
-# She visits that URL - her todo list is still there
+    # There still exists the textbox inviting Gwen to add
+    # another item. She enters "Buy some kombucha" as another
+    # item on the list.
 
-# Satisfied, she closes the browser()
-browser.quit()
+    # The page updates again, now shows two items on her list
+
+    # Gwen wonders if the site will remember her list. Then
+    # she sees the site has generated a unique URL for her
+    # and there is some explanatory text to that effect.
+
+    # She visits that URL - her todo list is still there
+
+    # Satisfied, she closes the browser()
+
+
+if __name__ == '__main__':
+    unittest.main(
+        warnings='ignore'
+    )  # automatically finds test classes and methods in the file and runs them

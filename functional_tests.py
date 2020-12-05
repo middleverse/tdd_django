@@ -37,14 +37,23 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)  # make sure browser has finished loading
 
+        # self.pass_flag = True
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1: Mow the lawn' for row in rows),
-                        'New TODO item did not appear in the table')
+        self.assertIn('1: Mow the lawn', [row.text for row in rows])
 
         # There still exists the textbox inviting Gwen to add
         # another item. She enters "Buy some kombucha" as another
         # item on the list.
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy some kombucha')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('2: Buy some kombucha', [row.text for row in rows])
+
         self.fail('finish the test!')
 
         # The page updates again, now shows two items on her list

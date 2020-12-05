@@ -15,6 +15,11 @@ class NewVisitorTest(unittest.TestCase):
         else:
             self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Gwen goes to check out the app's homepage
         self.browser.get('http://localhost:8000')
@@ -38,9 +43,7 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)  # make sure browser has finished loading
 
         # self.pass_flag = True
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Mow the lawn', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Mow the lawn')
 
         # There still exists the textbox inviting Gwen to add
         # another item. She enters "Buy some kombucha" as another
@@ -49,14 +52,13 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys('Buy some kombucha')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
-
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('2: Buy some kombucha', [row.text for row in rows])
+        
+        # The page updates again, now shows two items on her list
+        self.check_for_row_in_list_table('1: Mow the lawn')
+        self.check_for_row_in_list_table('2: Buy some kombucha')
 
         self.fail('finish the test!')
 
-        # The page updates again, now shows two items on her list
 
         # Gwen wonders if the site will remember her list. Then
         # she sees the site has generated a unique URL for her

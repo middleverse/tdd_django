@@ -10,6 +10,3 @@ class HomePageTest(TestCase):
     def test_uses_home_template(self):
         response = self.client.get('/')  # Django Test Client tool
         self.assertTemplateUsed(response, 'home.html')
-
-        
-    
